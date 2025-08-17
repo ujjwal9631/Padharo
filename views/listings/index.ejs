@@ -1,115 +1,58 @@
 <% layout('/layouts/boilerplate') %>
+<script src="/js/category-filter.js" defer></script>
 
-<body>
-    <style>
-      #filters{
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      }
-      .filter{
-        text-align: center;
-        margin-right: 2rem;
-        margin-top: 2rem;
-        opacity: 0.7;
-      }
-      .filter:hover{
-        opacity: 1;
-        cursor: pointer;
-      }
-      .filter p{
-        font-size: 0.8rem;
-        }
+<link rel="stylesheet" href="/css/category-filter.css">
+<div class="listings-container">
+    <!-- Search and Filter Section -->
+    <div class="search-filters-container">
+        <div class="categories-wrapper">
+            <div class="categories-scroll">
+                <% const categories = [
+                    { name: 'Trending', icon: 'fa-fire', param: 'trending', color: '#FF385C' },
+                    { name: 'Rooms', icon: 'fa-bed', param: 'rooms', color: '#914669' },
+                    { name: 'Iconic Cities', icon: 'fa-city', param: 'iconic-cities', color: '#CC2D4A' },
+                    { name: 'Mountains', icon: 'fa-mountain', param: 'mountains', color: '#BC1A6E' },
+                    { name: 'Amazing Pools', icon: 'fa-swimming-pool', param: 'pools', color: '#D93B30' },
+                    { name: 'Camping', icon: 'fa-campground', param: 'camping', color: '#CC2D4A' },
+                    { name: 'Farms', icon: 'fa-wheat-awn', param: 'farms', color: '#BC1A6E' },
+                    { name: 'Arctic', icon: 'fa-snowflake', param: 'arctic', color: '#428BFF' },
+                    { name: 'Domes', icon: 'fa-igloo', param: 'domes', color: '#DE3151' },
+                    { name: 'Boats', icon: 'fa-sailboat', param: 'boats', color: '#D93B30' }
+                ] %>
 
-      .tax-info{
-        display: none;
-        }
+                <% categories.forEach(category => { %>
+                    <a href="/listings?category=<%= category.param %>" 
+                       class="category-item <%= ((req && req.query && req.query.category === category.param) ? 'active' : '') %>"
+                       data-category="<%= category.param %>">
+                        <div class="category-icon" style="color: <%= category.color %>">
+                            <i class="fa-solid <%= category.icon %>"></i>
+                        </div>
+                        <span><%= category.name %></span>
+                    </a>
+                <% }) %>
+            </div>
+            <button class="nav-btn prev-btn" onclick="scrollCategories(-200)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn next-btn" onclick="scrollCategories(200)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
 
-      .tax-toggle{
-        border: 1px solid black ;
-        border-radius: 1rem;
-        height: 3.25rem;
-        padding: 1rem;
-        margin-top: 2rem;
-        margin-left: 2rem;
-        display: flex;
-        align-items: center;
-        }
-    </style>
-     <div id="filters">
-     <div class="filter">
-        <a href="/listings?category=trending">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <p>Trending</p>
-        </a>
-     </div>
-     <div class="filter">
-        <a href="/listings?category=rooms">
-            <div><i class="fa-solid fa-bed"></i></div>
-            <p>Rooms</p>
-        </a>
-     </div>
-     <div class="filter">
-        <a href="/listings?category=iconic-cities">
-            <div><i class="fa-solid fa-mountain-city"></i></div>
-            <p>Iconic cities</p>
-        </a>
+        <div class="filters-toggle">
+            <button class="btn btn-filters" onclick="toggleFilters()">
+                <i class="fas fa-sliders-h"></i>
+                <span>Filters</span>
+            </button>
+            <div class="tax-display">
+                <label class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="showTaxes" checked>
+                    <span class="form-check-label">Display total after taxes</span>
+                </label>
+            </div>
+        </div>
     </div>
-     <div class="filter">
-        <a href="/listings?category=mountains">
-            <div><i class="fa-solid fa-mountain"></i></div>
-            <p>Mountains</p>
-        </a>
-     </div>
-     <div class="filter">
-        <a href="/listings?category=castle">
-            <div><i class="fa-brands fa-fort-awesome"></i></div>
-            <p>Castle</p>
-        </a>
     </div>
-     <div class="filter">
-        <a href="/listings?category=pools">
-            <div><i class="fa-solid fa-person-swimming"></i></div>
-            <p>Amazing Pools</p>
-        </a>
-    </div>
-     <div class="filter">
-        <a href="/listings?category=camping">
-            <div><i class="fa-solid fa-campground"></i></div>
-            <p>Camping</p>
-        </a>
-    </div>
-     <div class="filter">
-        <a href="/listings?category=farms">
-            <div><i class="fa-solid fa-cow"></i></div>
-            <p>Farms</p>
-        </a>
-    </div>
-     <div class="filter">
-        <a href="/listings?category=arctic">
-            <div><i class="fa-regular fa-snowflake"></i></div>
-            <p>Arctic</p>
-        </a>
-    </div>
-     <div class="filter">
-        <a href="/listings?category=domes">
-            <div><i class="fa-solid fa-igloo"></i></div>
-            <p>Domes</p>
-        </a>
-    </div>
-     <div class="filter">
-        <a href="/listings?category=boats">
-            <div><i class="fa-solid fa-ship"></i></div>
-            <p>Boats</p>
-        </a>
-    </div>
-      <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-  <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
-</div>
-      </div>
-     </div>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     
       <% if (allListings && allListings.length > 0) { %>

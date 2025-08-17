@@ -4,45 +4,198 @@
    const mapToken = "<%= process.env.MAP_TOKEN %>";
    const listing = <%- JSON.stringify(listing) %>;
 </script>
-<div class="row mt-3">
-    <div class="col-8 offset-3">
 
-
-<h3><%= listing.title %></h3>
-    </div>
-
-    <div class="card col-6 offset-3 show-card listing-card">
-        <img src="<%=listing.image.url%>" class="card-img-top show-img" alt="listing_image">
-        <div class="card-body">
-        <p class="card-text" >Owned by <i><%= listing.owner.username %></i></p>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const taxToggle = document.getElementById('taxToggle');
+        const taxDetails = document.getElementById('taxDetails');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const basePrice = parseInt('<%= listing.price %>');
         
-            <br>
-        <p class="card-text" ><%= listing.description %> </p>
-        <p class="card-text" > &#8377;
-<%= listing.price.toLocaleString("en-IN") %> </p>
+        function formatPrice(amount) {
+            return amount.toLocaleString("en-IN");
+        }
+        
+        function toggleTaxDisplay() {
+            if (taxToggle.checked) {
+                taxDetails.classList.remove('hidden');
+                totalDisplay.classList.remove('hidden');
+                const total = basePrice + Math.round(basePrice * 0.18) + 99;
+                totalDisplay.innerHTML = `<strong>Total: ₹${formatPrice(total)}</strong>`;
+            } else {
+                taxDetails.classList.add('hidden');
+                totalDisplay.innerHTML = `<strong>Base Price: ₹${formatPrice(basePrice)}</strong>`;
+            }
+        }
+        
+        taxToggle.addEventListener('change', toggleTaxDisplay);
+        
+        // Initialize state
+        toggleTaxDisplay();
+    });
+</script>
+
+<div class="container listing-container mt-4">
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <!-- Title and Location Section -->
+            <div class="listing-header mb-4">
+                <h1 class="listing-title"><%= listing.title %></h1>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="location-info">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span><%= listing.location %>, <%= listing.country %></span>
+                        <a href="#map" class="text-decoration-none">Show map</a>
+                    </div>
+                    <div class="share-save">
+                        <button class="btn btn-link"><i class="fas fa-share"></i> Share</button>
+                        <button class="btn btn-link"><i class="fas fa-heart"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Gallery -->
+            <div class="listing-gallery mb-4">
+                <div class="main-image-container">
+                    <img src="<%=listing.image.url%>" class="main-image rounded" alt="<%=listing.title%>">
+                </div>
+            </div>
+
+            <!-- Host and Details Section -->
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="host-section border-bottom pb-4 mb-4">
+                        <h2>Hosted by <%= listing.owner.username %></h2>
+                        <p class="text-muted">Superhost · Great location · Great check-in experience</p>
+                    </div>
+
+                    <div class="description-section border-bottom pb-4 mb-4">
+                        <h3>About this place</h3>
+                        <p class="listing-description"><%= listing.description %></p>
+                    </div>
+                </div>
+
+                <!-- Booking Card -->
+                <div class="col-12 col-lg-4">
+                    <div class="booking-card shadow-sm rounded-3 p-4 sticky-top">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="price-display">
+                                <h3 class="mb-0">₹<%= listing.price.toLocaleString("en-IN") %></h3>
+                                <span class="text-muted">per night</span>
+                            </div>
+                            <div class="tax-toggle-container">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="taxToggle" checked>
+                                    <label class="form-check-label small" for="taxToggle">Include taxes</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="taxDetails" class="tax-details mb-3">
+                            <div class="price-breakdown">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Base price</span>
+                                    <span>₹<%= listing.price.toLocaleString("en-IN") %></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">GST (18%)</span>
+                                    <span>₹<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Service fee</span>
+                                    <span>₹99</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between fw-bold">
+                                    <span>Total</span>
+                                    <span id="totalDisplay">₹<%= (listing.price + Math.round(listing.price * 0.18) + 99).toLocaleString("en-IN") %></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+                            <div class="d-grid gap-2">
+                                <a href="/listings/<%= listing._id%>/edit" class="btn btn-outline-dark">
+                                    <i class="fas fa-edit me-2"></i>Edit Listing
+                                </a>
+                                <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+                                    <button class="btn btn-danger w-100">
+                                        <i class="fas fa-trash me-2"></i>Delete Listing
+                                    </button>
+                                </form>
+                            </div>
+                        <% } else if(currUser) { %>
+                            <form method="POST" action="/cart/<%= listing._id %>" class="d-grid">
+                                <button class="btn btn-primary btn-lg">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <p class="card-text">Owned by <i><%= listing.owner.username %></i></p>
+        <p class="card-text"><%= listing.description %></p>
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Price Details</h5>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="taxToggle" checked>
+                <label class="form-check-label" for="taxToggle">Display total after taxes</label>
+            </div>
+        </div>
+
+        <div class="price-container">
+            <div class="base-price mb-2">
+                <h4 class="mb-0">₹<%= listing.price.toLocaleString("en-IN") %></h4>
+                <small class="text-muted">Base price</small>
+            </div>
+
+            <div class="tax-details" id="taxDetails">
+                <div class="price-details p-3 bg-light rounded-3 mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">GST (18%)</span>
+                        <span>₹<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Booking Fee</span>
+                        <span>₹99</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Total Amount</span>
+                        <span>₹<%= (listing.price + Math.round(listing.price * 0.18) + 99).toLocaleString("en-IN") %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <p class="card-text" > <%= listing.location %> </p>
-            <p class="card-text" ><%= listing.country %>  </p>
-    
+        <p class="card-text" ><%= listing.country %>  </p>
     </div>
     </div>
 
     <br>
     </div>
     <% if(currUser && listing.owner._id.equals(currUser._id)){ %>
-    <div class="btns">
-
-        <a href="/listings/<%= listing._id%>/edit"
-            class="btn btn-dark col-1 offset-3 edit-btn"
-            >Edit</a>
+    <div class="btns d-flex justify-content-center gap-3 mt-3">
+        <a href="/listings/<%= listing._id%>/edit" class="btn btn-dark btn-lg px-4">
+            <i class="fas fa-edit me-2"></i>Edit
+        </a>
         <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
-            <button class="btn btn-dark  offset-5">Delete</button>
+            <button class="btn btn-danger btn-lg px-4">
+                <i class="fas fa-trash me-2"></i>Delete
+            </button>
         </form>
-    
-</div>
+    </div>
 <% } else if(currUser) { %>
-<div class="btns">
+<div class="btns d-flex justify-content-center mt-3">
     <form method="POST" action="/cart/<%= listing._id %>">
-        <button class="btn btn-primary col-2 offset-3 edit-btn">Add to Cart</button>
+        <button class="btn btn-primary btn-lg px-4">
+            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+        </button>
     </form>
 </div>
 <% } %>

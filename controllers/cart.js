@@ -10,25 +10,42 @@ module.exports.showCart = async (req, res) => {
 };
 
 module.exports.addToCart = async (req, res) => {
-    const { id } = req.params;
-    const listing = await Listing.findById(id);
-    let cart = await Cart.findOne({ owner: req.user._id });
+    try {
+        const { id } = req.params;
+        
+        // Check if listing exists
+        const listing = await Listing.findById(id);
+        if (!listing) {
+            req.flash("error", "Listing not found");
+            return res.redirect("/listings");
+        }
 
-    if (!cart) {
-        cart = new Cart({ owner: req.user._id, items: [] });
+        // Find or create cart for the user
+        let cart = await Cart.findOne({ owner: req.user._id });
+        if (!cart) {
+            cart = new Cart({ owner: req.user._id, items: [] });
+        }
+
+        // Check if item already exists in cart
+        const itemIndex = cart.items.findIndex(item => item.listing && item.listing.equals(listing._id));
+
+        if (itemIndex > -1) {
+            // If item exists, increment quantity
+            cart.items[itemIndex].quantity += 1;
+            req.flash("success", `Increased quantity of ${listing.title} in your cart!`);
+        } else {
+            // If item doesn't exist, add new item
+            cart.items.push({ listing: listing._id, quantity: 1 });
+            req.flash("success", `${listing.title} added to cart!`);
+        }
+
+        await cart.save();
+        res.redirect(`/listings/${id}`);
+    } catch (err) {
+        console.error(err);
+        req.flash("error", "Error adding item to cart");
+        res.redirect(`/listings/${req.params.id}`);
     }
-
-    const itemIndex = cart.items.findIndex(item => item.listing.equals(listing._id));
-
-    if (itemIndex > -1) {
-        cart.items[itemIndex].quantity += 1;
-    } else {
-        cart.items.push({ listing: listing._id, quantity: 1 });
-    }
-
-    await cart.save();
-    req.flash("success", `${listing.title} added to cart!`);
-    res.redirect(`/listings/${id}`);
 };
 
 module.exports.removeFromCart = async (req, res) => {
@@ -51,7 +68,7 @@ module.exports.bookNow = async (req, res) => {
     
     // Example with a placeholder for a payment gateway:
     try {
-        const cart = await Cart.findOne({ owner: req.user._id });
+        const cart = await Cart.findOne({ owner: req.user._id }).populate('items.listing');
         if (!cart || cart.items.length === 0) {
             req.flash("error", "Your cart is empty.");
             return res.redirect("/cart");
@@ -70,7 +87,7 @@ module.exports.bookNow = async (req, res) => {
         // });
 
         // For now, we'll simulate a successful booking.
-        req.flash("success", `Your booking has been confirmed! Total amount: &#8377;${totalPrice.toLocaleString("en-IN")}.`);
+        req.flash("success", `Your booking has been confirmed! Total amount: ₹${totalPrice.toLocaleString("en-IN")}`);
         
         // Clear the cart after a successful booking.
         cart.items = [];
