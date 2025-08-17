@@ -1,21 +1,6 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Padharo</title>
-</head> -->
-
 <% layout('/layouts/boilerplate') %>
 
-<!-- yha success wla message ko use kr he hain -->
-<%= success %>  
 <body>
-    <!-- <h3>All Listings</h3> -->
-    <!-- <form method="GET" action="/listings/new">
-        <button>Create New Listing</button>
-    </form> -->
-
     <style>
       #filters{
       display: flex;
@@ -34,11 +19,11 @@
       }
       .filter p{
         font-size: 0.8rem;
-      }
+        }
 
       .tax-info{
         display: none;
-      }
+        }
 
       .tax-toggle{
         border: 1px solid black ;
@@ -49,45 +34,75 @@
         margin-left: 2rem;
         display: flex;
         align-items: center;
-      }
+        }
     </style>
      <div id="filters">
      <div class="filter">
-      <div><i class="fa-solid fa-fire"></i></div>
-     <p>Trending</p> 
+        <a href="/listings?category=trending">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </a>
      </div>
      <div class="filter">
-      <div><i class="fa-solid fa-bed"></i></div>
-     <p>Rooms</p> 
+        <a href="/listings?category=rooms">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </a>
      </div>
      <div class="filter">
-      <div><i class="fa-solid fa-mountain-city"></i></div>
-     <p>Iconic cities</p> 
+        <a href="/listings?category=iconic-cities">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic cities</p>
+        </a>
     </div>
      <div class="filter">
-      <div><i class="fa-solid fa-mountain"></i></div>
-     <p>Mountains</p></div> 
+        <a href="/listings?category=mountains">
+            <div><i class="fa-solid fa-mountain"></i></div>
+            <p>Mountains</p>
+        </a>
+     </div>
      <div class="filter">
-      <div><i class="fa-brands fa-fort-awesome"></i></div>
-     <p>Castle</p> </div>
+        <a href="/listings?category=castle">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castle</p>
+        </a>
+    </div>
      <div class="filter">
-      <div><i class="fa-solid fa-person-swimming"></i></div>
-     <p>Amazing Pools</p> </div>
+        <a href="/listings?category=pools">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing Pools</p>
+        </a>
+    </div>
      <div class="filter">
-      <div><i class="fa-solid fa-campground"></i></div>
-     <p>Camping</p> </div>
+        <a href="/listings?category=camping">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+        </a>
+    </div>
      <div class="filter">
-      <div><i class="fa-solid fa-cow"></i></div>
-     <p>Farms</p> </div>
+        <a href="/listings?category=farms">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+        </a>
+    </div>
      <div class="filter">
-      <div><i class="fa-regular fa-snowflake"></i></div>
-     <p>Arctic</p> </div>
+        <a href="/listings?category=arctic">
+            <div><i class="fa-regular fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </a>
+    </div>
      <div class="filter">
-      <div><i class="fa-solid fa-igloo"></i></div>
-     <p>Domes</p> </div>
+        <a href="/listings?category=domes">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Domes</p>
+        </a>
+    </div>
      <div class="filter">
-      <div><i class="fa-solid fa-ship"></i></div>
-     <p>Boats</p> </div>
+        <a href="/listings?category=boats">
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Boats</p>
+        </a>
+    </div>
       <div class="tax-toggle">
         <div class="form-check-reverse form-switch">
   <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
@@ -96,6 +111,8 @@
       </div>
      </div>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    
+      <% if (allListings && allListings.length > 0) { %>
       <% for(let listing of allListings){   %>
         <a href="/listings/<%= listing._id %>" class="listing-link">
         <div class="card col listing-card" style="width: 20rem">
@@ -104,25 +121,27 @@
            src="<%=listing.image.url %>" 
            alt="listing_image" style="height: 20rem">
           <div class ="card-img-overlay"></div>
+      
           <div class="card-body">
             <p class="card-text">
               <b><%= listing.title %> <br/></b>
               &#8377;<%=listing.price.toLocaleString("en-IN")%> /night
               <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
               </p>
-              <!-- Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
           </div>
         </div>
        </a>
       <% }  %>
-   
-  
+      <% } else { %>
+          <div class="col-12 mt-4">
+              <p>No listings found for your search/filter criteria.</p>
+          </div>
+      <% } %>
     </div>
-
   <script>
-    let taxSwitch = document.getElementById("switchCheckDefault")
+    let taxSwitch 
+    = document.getElementById("switchCheckDefault")
     taxSwitch.addEventListener("click",()=>{
-      // console.log("clicked");
       let taxInfo = document.getElementsByClassName("tax-info");
       for(info of taxInfo){
         if(info.style.display != "inline"){
@@ -134,17 +153,4 @@
       }
     })
   </script>
-
-
-    
-     
-    
-    <!-- <ul>
-        <% for(let listing of allListings){   %>
-             <li><a href="/listings/<%= listing._id %>"><%= listing.title %></a></li>
-        <% }  %>
-        
-        </ul> -->
 </body>
-<!-- </html> -->
-

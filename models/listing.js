@@ -25,6 +25,14 @@ const listingSchema = new mongoose.Schema({  //gpt
     price: Number,
     location: String,
     country: String,
+
+     category:{
+        type: String ,
+        enum: [
+             "trending", "rooms", "iconic-cities", "mountains", "castle",
+            "pools", "camping", "farms", "arctic", "domes", "boats"
+        ]
+     },
     // yha pr ek baar dekh lena how one to many relationship work , kaise listing ke andr reviwe model work kr rha hain
     reviews:[{
 
