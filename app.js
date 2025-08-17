@@ -246,6 +246,11 @@ passport.serializeUser(user.serializeUser());
 passport.deserializeUser(user.deserializeUser());
 
 // The order of these routes is critical. The more specific routes should come first.
+// Root route handler
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
+
 app.use("/cart", cartRouter);
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
