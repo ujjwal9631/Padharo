@@ -1,0 +1,136 @@
+.categories-wrapper {
+    position: relative;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.categories-scroll {
+    display: flex;
+    gap: 2rem;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding: 0.5rem 3rem;
+}
+
+.categories-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #717171;
+    min-width: 56px;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 0.5rem;
+}
+
+.category-item:hover {
+    color: #222;
+}
+
+.category-item.active {
+    color: #222;
+    border-bottom: 2px solid #222;
+}
+
+.category-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.category-item:hover .category-icon,
+.category-item.active .category-icon {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.category-item span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.nav-btn:hover {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    background: #f7f7f7;
+}
+
+.prev-btn {
+    left: 1rem;
+}
+
+.next-btn {
+    right: 1rem;
+}
+
+.filters-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+.btn-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: white;
+    font-size: 0.9rem;
+    color: #222;
+    transition: all 0.3s ease;
+}
+
+.btn-filters:hover {
+    background: #f7f7f7;
+    border-color: #bbb;
+}
+
+.tax-display {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    cursor: pointer;
+    width: 3rem;
+}
+
+.form-check-input:checked {
+    background-color: #fe424d;
+    border-color: #fe424d;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+    color: #222;
+    cursor: pointer;
+}

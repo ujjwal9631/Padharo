@@ -1,6 +1,7 @@
 const sampleListings = [
   {
     title: "Cozy Beachfront Cottage",
+    category: "trending",
     description:
       "Escape to this charming beachfront cottage for a relaxing getaway. Enjoy stunning ocean views and easy access to the beach.",
     image: {
@@ -13,6 +14,7 @@ const sampleListings = [
   },
   {
     title: "Modern Loft in Downtown",
+    category: "rooms",
     description:
       "Stay in the heart of the city in this stylish loft apartment. Perfect for urban explorers!",
     image: {
@@ -25,6 +27,7 @@ const sampleListings = [
   },
   {
     title: "Mountain Retreat",
+    category: "mountains",
     description:
       "Unplug and unwind in this peaceful mountain cabin. Surrounded by nature, it's a perfect place to recharge.",
     image: {
@@ -35,20 +38,10 @@ const sampleListings = [
     location: "Aspen",
     country: "United States",
   },
-  {
-    title: "Historic Villa in Tuscany",
-    description:
-      "Experience the charm of Tuscany in this beautifully restored villa. Explore the rolling hills and vineyards.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG90ZWxzfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 2500,
-    location: "Florence",
-    country: "Italy",
-  },
+
   {
     title: "Secluded Treehouse Getaway",
+    category: "camping",
     description:
       "Live among the treetops in this unique treehouse retreat. A true nature lover's paradise.",
     image: {
@@ -61,6 +54,7 @@ const sampleListings = [
   },
   {
     title: "Beachfront Paradise",
+    category: "pools",
     description:
       "Step out of your door onto the sandy beach. This beachfront condo offers the ultimate relaxation.",
     image: {
@@ -73,6 +67,7 @@ const sampleListings = [
   },
   {
     title: "Rustic Cabin by the Lake",
+    category: "camping",
     description:
       "Spend your days fishing and kayaking on the serene lake. This cozy cabin is perfect for outdoor enthusiasts.",
     image: {
@@ -85,6 +80,7 @@ const sampleListings = [
   },
   {
     title: "Luxury Penthouse with City Views",
+    category: "rooms",
     description:
       "Indulge in luxury living with panoramic city views from this stunning penthouse apartment.",
     image: {
@@ -97,6 +93,7 @@ const sampleListings = [
   },
   {
     title: "Ski-In/Ski-Out Chalet",
+    category: "arctic",
     description:
       "Hit the slopes right from your doorstep in this ski-in/ski-out chalet in the Swiss Alps.",
     image: {
@@ -109,6 +106,7 @@ const sampleListings = [
   },
   {
     title: "Safari Lodge in the Serengeti",
+    category: "farms",
     description:
       "Experience the thrill of the wild in a comfortable safari lodge. Witness the Great Migration up close.",
     image: {
@@ -119,20 +117,10 @@ const sampleListings = [
     location: "Serengeti National Park",
     country: "Tanzania",
   },
-  {
-    title: "Historic Canal House",
-    description:
-      "Stay in a piece of history in this beautifully preserved canal house in Amsterdam's iconic district.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FtcGluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1800,
-    location: "Amsterdam",
-    country: "Netherlands",
-  },
+
   {
     title: "Private Island Retreat",
+    category: "islands",
     description:
       "Have an entire island to yourself for a truly exclusive and unforgettable vacation experience.",
     image: {
@@ -145,6 +133,7 @@ const sampleListings = [
   },
   {
     title: "Charming Cottage in the Cotswolds",
+    category: "countryside",
     description:
       "Escape to the picturesque Cotswolds in this quaint and charming cottage with a thatched roof.",
     image: {
@@ -157,6 +146,7 @@ const sampleListings = [
   },
   {
     title: "Historic Brownstone in Boston",
+    category: "rooms",
     description:
       "Step back in time in this elegant historic brownstone located in the heart of Boston.",
     image: {
@@ -169,6 +159,7 @@ const sampleListings = [
   },
   {
     title: "Beachfront Bungalow in Bali",
+    category: "beach",
     description:
       "Relax on the sandy shores of Bali in this beautiful beachfront bungalow with a private pool.",
     image: {
@@ -181,6 +172,7 @@ const sampleListings = [
   },
   {
     title: "Mountain View Cabin in Banff",
+    category: "mountains",
     description:
       "Enjoy breathtaking mountain views from this cozy cabin in the Canadian Rockies.",
     image: {
